@@ -58,8 +58,14 @@ Re-ran on `targetSdk 36` (Pixel 8 Pro / Android 16); **identical to target 35, z
 | capture stop/start ×2 + FGS cleanup | ✓ | ✓ (fg services 1→0→1→0) |
 | Gate 2 signaling (join/leave/reconnect) | ✓ | ✓ |
 
+## Gate 2.5b — disableAudioPrewarming ✅ PASS
+Added `AudioOptions(audioHandler=NoAudioHandler(), disableAudioPrewarming=true)`. Re-ran Gate 2:
+listener sees pixel-host, `publishedTracks=0`, `AudioManager.mode=NORMAL` before + after connect.
+(`AudioOptions` also exposes `disableCommunicationModeWorkaround` — may be relevant for the Gate 5 A2DP work.)
+
 ## Not yet done
-- **Gate 2.5b** add `AudioOptions(disableAudioPrewarming=true)` (separate commit) + rerun Gate 2 (confirm mode=NORMAL, zero tracks, no RECORD_AUDIO activity).
-- **Gate 3** first audible publish (Path B: audio-only MediaProjection → ScreenAudioCapturer → LocalAudioTrack; experiments B1/B2). Before Gate 3: bump `targetSdk 36` + rerun capture/lock/permission tests; add `disableAudioPrewarming` (verify AudioOptions param), verify `setAudioRecordEnabled(false)` still fires the buffer callback.
+- **Gate 3** first audible publish (Path B). Plan: move Room/LocalAudioTrack/ScreenAudioCapturer/MediaProjection/ADM into the foreground service (service-owned session); mutually-exclusive `LOCAL_PROOF` vs `LIVEKIT_PUBLISH` modes (never two AudioPlaybackCapture AudioRecords at once); `FOREGROUND_SERVICE_MICROPHONE` + type `mediaProjection|microphone` (started while Activity visible); publish source = `SCREEN_SHARE_AUDIO`, bitrate ~160k, dtx off. Experiments **B1** (physical AudioRecord on → prove transport + detect mic contamination via clap test) and **B2** (`JavaAudioDeviceModule.setAudioRecordEnabled(false)` at runtime + callback counter → prove callback still fires + no mic leakage). Pass = 1 SCREEN_SHARE_AUDIO track, remote non-silent ≥60s, B2 callbacks increasing, no mic leakage, mode NORMAL, stop removes track, 2nd start works. Stereo=Gate 4, BT/lock/15min=Gate 5.
+- **Gate 4** deterministic L/R stereo isolation.
+- **Gate 5** Bluetooth A2DP + true-lock non-silent (M0.6) + 15-min + lifecycle. (Path B: audio-only MediaProjection → ScreenAudioCapturer → LocalAudioTrack; experiments B1/B2). Before Gate 3: bump `targetSdk 36` + rerun capture/lock/permission tests; add `disableAudioPrewarming` (verify AudioOptions param), verify `setAudioRecordEnabled(false)` still fires the buffer callback.
 - **Gate 4** deterministic L/R stereo isolation.
 - **Gate 5** Bluetooth A2DP + true-lock non-silent (M0.6) + 15-min stability + lifecycle.

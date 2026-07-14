@@ -49,7 +49,12 @@ class Gate2LiveKit(private val ctx: Context, private val log: (String) -> Unit) 
                 val r = LiveKit.create(
                     ctx.applicationContext,
                     overrides = LiveKitOverrides(
-                        audioOptions = AudioOptions(audioHandler = NoAudioHandler()),
+                        // NoAudioHandler: don't grab audio focus / change BT route on connect.
+                        // disableAudioPrewarming: don't spin up recording resources before we publish.
+                        audioOptions = AudioOptions(
+                            audioHandler = NoAudioHandler(),
+                            disableAudioPrewarming = true,
+                        ),
                     ),
                 )
                 room = r
