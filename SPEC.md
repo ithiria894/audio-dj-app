@@ -88,10 +88,19 @@
 - **⚠️ 風險(我 adversarial 研究):LiveKit Android publisher 預設 mono,音樂級 stereo publish 未證(LiveKit #2101 closed not-planned)。** capture 側已實測 stereo;**Stage 0 必驗「stereo 真係去到 listener」,有 mono fallback。**
 - 多 listener 同步:每 receiver 固定 playout buffer(唔追最低 latency);buffer 值 Stage 1 定。
 
-**藍牙 rule:**
-- host mic **預設完全 off**(唔傳咪),避免藍牙由 A2DP 跌落 HFP/SCO 通話音質。
-- **⚠️ 風險(比「mic off」更深):LiveKit/WebRTC Android 可能將 audio 設 communication mode,迫 host 自己隻藍牙落 SCO/HFP —— 即使 mic off。** 可能要自訂 AudioDeviceModule / 迫 mode=NORMAL。**Stage 0 必測,可能要寫 code。**
-- background capture:ScreenAudioCapturer 背景輸出需要 **microphone type foreground service**(LiveKit 官方)——但唔開咪本身。
+**Capture path(Path B,產品目標)—— 見 `docs/adr/0002-audio-only-mediaprojection.md`:**
+```
+audio-only MediaProjection → ScreenAudioCapturer(= MixerAudioBufferCallback,唔係獨立 track)
+  → LocalAudioTrack(只做 WebRTC transport carrier)→ 實體咪 recording 停用/隔離
+  → 唔發 screen video、唔開 VirtualDisplay → publish source = SCREEN_SHARE_AUDIO
+```
+- **精準 wording**:「唔混 mic」= **唔擷取/唔傳送任何實體咪 sample**。**唔等於**冇 mic infrastructure —— LiveKit `LocalAudioTrack`、`RECORD_AUDIO` 權限、`microphone`-type foreground service **可能仍然需要**(ScreenAudioCapturer 背景輸出要 mic-type FGS,否則背景可能得靜音)。
+- **Path A(baseline)**:官方 example(screen video + mic track)只做 transport proof 對照,**唔會**係 shipped 架構(會開 VirtualDisplay 破壞鎖屏 + 迫 A2DP→SCO)。
+
+**藍牙 A2DP rule:**
+- host mic 預設 off;gain=1.0f;NS/EC/AGC/high-pass/typing-detection/DTX 全 off(音樂)。
+- **`AudioOptions(audioHandler=NoAudioHandler(), disableAudioPrewarming=true)`** —— NoAudioHandler 唔管 audio focus/routing,避免一 connect room 就搶 focus / 改 BT route。Gate 2 起就用。
+- Gate 3 實驗 `JavaAudioDeviceModule.setAudioRecordEnabled(false)`(停實體咪,保留 custom system-audio callback)—— **必須實機驗 callback 仲行**,唔靠 setting 名判斷,要量 `AudioManager.mode` / BT profile / active device / listener PCM / mic 隔離。
 
 ---
 
@@ -164,9 +173,14 @@ audio-dj-app/
 ## 11. Project board / milestones
 ```
 M0       Local capture proof(capture + stereo,落機)        ✅
-M0.5     Lock survival, pipeline only(onStop=0)             ✅
-M0.6     Non-silent locked capture(source 鎖屏續播 + 遠端收到) ⏳
-Stage 0A LiveKit over LAN                                    ⏳ ← 而家做
+M0.5     Lock survival, pipeline only(onStop=0)             ✅ tested-device (Pixel 8 Pro/A16)
+M0.6     Non-silent remote audio after lock                 ⏳
+Stage 0A LiveKit over LAN                                    ⏳ ← 而家
+  ├ Gate 1  Web listener signaling(token/CORS/state/canPublish=false)  ✅
+  ├ Gate 2  Android signaling(connect DJ token, publishedTracks=0)     ⏳
+  ├ Gate 3  First audible publish(Path B)                              ⏳
+  ├ Gate 4  Objective stereo(L/R tone + listener PCM + SDP stats)      ⏳
+  └ Gate 5  Bluetooth A2DP + true-lock non-silent + 15min + lifecycle  ⏳
 Stage 0B LiveKit over public internet(VPS)                 ⏳
 Stage 1  Private-room MVP                                    未開始
 Stage 2  Native listeners / background / Sync Mode           未開始
