@@ -122,6 +122,15 @@ class MainActivity : AppCompatActivity() {
             preflightMode = true
             projLauncher.launch(mpm.createScreenCaptureIntent())
         }
+        // Gate 3.1 — service-owned LiveKit session (survives Activity backgrounding), 0 tracks
+        findViewById<Button>(R.id.gate31ConnectBtn).setOnClickListener {
+            ContextCompat.startForegroundService(this, Intent(this, AudioCaptureService::class.java).setAction(AudioCaptureService.ACTION_LK_CONNECT))
+            appendLog("G3.1: service LiveKit connect requested")
+        }
+        findViewById<Button>(R.id.gate31DisconnectBtn).setOnClickListener {
+            startService(Intent(this, AudioCaptureService::class.java).setAction(AudioCaptureService.ACTION_LK_DISCONNECT))
+            appendLog("G3.1: service LiveKit disconnect requested")
+        }
 
         appendLog("ready. Tap 開始擷取, allow the prompt, then play music.")
     }

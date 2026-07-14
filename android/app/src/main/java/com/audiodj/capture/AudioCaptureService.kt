@@ -22,6 +22,10 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.os.SystemClock
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.Locale
@@ -41,6 +45,8 @@ class AudioCaptureService : Service() {
         const val ACTION_STOP = "com.audiodj.capture.STOP"
         const val ACTION_SAVE = "com.audiodj.capture.SAVE"
         const val ACTION_PREFLIGHT = "com.audiodj.capture.PREFLIGHT" // Gate 2.6
+        const val ACTION_LK_CONNECT = "com.audiodj.capture.LK_CONNECT"     // Gate 3.1 (service-owned LiveKit)
+        const val ACTION_LK_DISCONNECT = "com.audiodj.capture.LK_DISCONNECT"
         const val ACTION_LEVEL = "com.audiodj.capture.LEVEL"
         const val ACTION_LOG = "com.audiodj.capture.LOG"
         const val EXTRA_RESULT_CODE = "rc"
@@ -66,17 +72,27 @@ class AudioCaptureService : Service() {
     }
     private var receiverRegistered = false
 
+    // Gate 3.1: service-owned LiveKit session. LOCAL_PROOF (capture meter/WAV) and
+    // LIVEKIT_PUBLISH must be mutually exclusive — never two AudioPlaybackCapture AudioRecords.
+    private enum class Mode { IDLE, LOCAL_PROOF, LIVEKIT_PUBLISH }
+    @Volatile private var mode = Mode.IDLE
+    private val serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private var lkSession: Gate2LiveKit? = null
+
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_STOP -> { stopEverything(); stopSelf(); return START_NOT_STICKY }
             ACTION_SAVE -> { requestSave(); return START_NOT_STICKY }
+            ACTION_LK_CONNECT -> { lkConnect(); return START_NOT_STICKY }
+            ACTION_LK_DISCONNECT -> { lkDisconnect(); stopSelf(); return START_NOT_STICKY }
         }
         // A MediaProjection consent token cannot be recreated after process death, so never
         // sticky-restart (that would deliver a null intent with no token).
         if (intent == null) { log("null start intent (no projection token) — stopping"); stopSelf(); return START_NOT_STICKY }
         if (running) { log("already capturing — ignoring duplicate START"); return START_NOT_STICKY }
+        if (mode == Mode.LIVEKIT_PUBLISH) { log("LiveKit session active — disconnect it before LOCAL_PROOF capture"); stopSelf(); return START_NOT_STICKY }
         stopping = false
         startForegroundCompat()
         try {
@@ -148,6 +164,7 @@ class AudioCaptureService : Service() {
             record = r
             r.startRecording()
             running = true
+            mode = Mode.LOCAL_PROOF
             // DEBUG-ONLY test hook (adb-triggerable). Never exported in release builds.
             if (BuildConfig.DEBUG && !receiverRegistered) {
                 ContextCompat.registerReceiver(this, saveReceiver, IntentFilter("com.audiodj.capture.DO_SAVE"), ContextCompat.RECEIVER_EXPORTED)
@@ -248,9 +265,53 @@ class AudioCaptureService : Service() {
         try { if (receiverRegistered) { unregisterReceiver(saveReceiver); receiverRegistered = false } } catch (_: Exception) {}
         try { projection?.stop() } catch (_: Exception) {}
         projection = null
+        if (mode == Mode.LOCAL_PROOF) mode = Mode.IDLE
     }
 
-    override fun onDestroy() { stopEverything(); super.onDestroy() }
+    override fun onDestroy() {
+        stopEverything()
+        try { lkSession?.disconnect() } catch (_: Exception) {}
+        lkSession = null
+        try { serviceScope.cancel() } catch (_: Exception) {}
+        super.onDestroy()
+    }
+
+    // Gate 3.1 — service owns the LiveKit Room (survives Activity backgrounding); publishes 0 tracks.
+    private fun lkConnect() {
+        if (running || mode == Mode.LOCAL_PROOF) { log("capture (LOCAL_PROOF) active — stop it before LiveKit connect"); stopSelf(); return }
+        if (mode == Mode.LIVEKIT_PUBLISH) { log("LiveKit already connected"); return }
+        mode = Mode.LIVEKIT_PUBLISH
+        startForegroundMic()
+        val api = BuildConfig.DEV_TOKEN_API.ifEmpty { "http://127.0.0.1:8790/dev/token" }
+        lkSession = Gate2LiveKit(this) { m -> log(m) }
+        lkSession!!.connect(serviceScope, api)
+        log("service-owned LiveKit connect (Gate 3.1, publishing 0 tracks)")
+    }
+
+    private fun lkDisconnect() {
+        lkSession?.disconnect()
+        lkSession = null
+        mode = Mode.IDLE
+        try { stopForeground(STOP_FOREGROUND_REMOVE) } catch (_: Exception) {}
+        log("service-owned LiveKit disconnected")
+    }
+
+    private fun startForegroundMic() {
+        val nm = getSystemService(NotificationManager::class.java)
+        if (Build.VERSION.SDK_INT >= 26) {
+            nm.createNotificationChannel(NotificationChannel(CHANNEL_ID, "Capture", NotificationManager.IMPORTANCE_LOW))
+        }
+        val notif: Notification = Notification.Builder(this, CHANNEL_ID)
+            .setContentTitle("auxcrew — LiveKit session")
+            .setContentText("Connected (0 tracks)")
+            .setSmallIcon(android.R.drawable.ic_media_play)
+            .setOngoing(true)
+            .build()
+        if (Build.VERSION.SDK_INT >= 29)
+            startForeground(NOTIF_ID, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE)
+        else
+            startForeground(NOTIF_ID, notif)
+    }
 
     private fun startForegroundCompat() {
         val nm = getSystemService(NotificationManager::class.java)
