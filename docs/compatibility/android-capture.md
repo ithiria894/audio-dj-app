@@ -11,7 +11,7 @@ Empirical, on-device evidence for `AudioPlaybackCapture`. Not web reports. Repro
 | SDK / Build ID | 36 / CP1A.260505.005 |
 | Build fingerprint | `google/husky/husky:16/CP1A.260505.005/15081906:user/release-keys` |
 | Security patch | 2026-05-05 |
-| App version | `com.audiodj.capture` 0.1-spike (compileSdk 36, minSdk 29, targetSdk 35) |
+| App version | `com.audiodj.capture` 0.1-spike (compileSdk 36, minSdk 29, targetSdk **36** — first recorded at 35, re-verified at 36 in Gate 2.5) |
 | Repo commit | `3236183bacd7b46fdd32e832d836b629aeb21834` |
 | Test date | 2026-07-13 |
 

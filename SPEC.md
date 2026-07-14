@@ -179,7 +179,10 @@ M0.6     Non-silent remote audio after lock                 ⏳
 Stage 0A LiveKit over LAN                                    ⏳ ← 而家
   ├ Gate 1  Web listener signaling(token/CORS/state/canPublish=false)  ✅
   ├ Gate 2  Android signaling(connect DJ token, publishedTracks=0)     ✅ (browser saw join/leave/reconnect; AudioManager stayed NORMAL)
-  ├ Gate 3  First audible publish(Path B)                              ⏳
+  ├ Gate 2.6 ScreenAudioCapturer preflight(initAudioRecord)            ✅ (SDK hasArray guard passes on ART)
+  ├ Gate 2.5 targetSdk 35→36 regression                               ✅ (zero regression)
+  ├ Gate 2.5b disableAudioPrewarming=true                             ✅ (mode NORMAL, 0 tracks)
+  ├ Gate 3  First audible publish(Path B) — split 3.0/3.1/3.2/3.3     ⏳ (see docs/compatibility/stage0a-gates.md)
   ├ Gate 4  Objective stereo(L/R tone + listener PCM + SDP stats)      ⏳
   └ Gate 5  Bluetooth A2DP + true-lock non-silent + 15min + lifecycle  ⏳
 Stage 0B LiveKit over public internet(VPS)                 ⏳

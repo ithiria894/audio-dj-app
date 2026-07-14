@@ -6,7 +6,12 @@ const http = (process.env.LK_URL || 'ws://127.0.0.1:7880').replace(/^ws/, 'http'
 const svc = new RoomServiceClient(http, process.env.LK_API_KEY || 'devkey', process.env.LK_API_SECRET || 'secret')
 try {
   const ps = await svc.listParticipants('stage0')
-  console.log(JSON.stringify(ps.map(p => ({ identity: p.identity, tracks: p.tracks?.length || 0, state: p.state })), null, 0))
+  console.log(JSON.stringify(ps.map(p => ({
+    identity: p.identity,
+    state: p.state,
+    trackCount: p.tracks?.length || 0,
+    tracks: (p.tracks || []).map(t => ({ source: t.source, kind: t.type, muted: t.muted, name: t.name })),
+  })), null, 0))
 } catch (e) {
   console.log(JSON.stringify({ error: String(e) }))
 }

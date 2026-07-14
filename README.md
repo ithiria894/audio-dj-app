@@ -7,7 +7,7 @@ A private, small-group **"pass the aux, live"** app: the **host's Android phone 
 
 ## Status (2026-07-13)
 
-**On-device empirical results — Google Pixel 8 Pro, Android 16, app targeting API 35** (Android-16 behaviors that apply only to apps *targeting* API 36 are not yet exercised — retest at `targetSdk 36` before Gate 3):
+**On-device empirical results — Google Pixel 8 Pro, Android 16, app targeting API 36** (initial capture/lock results were first recorded at `targetSdk 35`; re-verified identical at `targetSdk 36` in Gate 2.5):
 - ✅ `AudioPlaybackCapture` captures playing audio — **plain YouTube** (RMS −16.4 dBFS) and **YouTube Music** (−15.3 dBFS), **stereo PCM with non-identical L/R** (end-to-end channel isolation not yet verified — awaits the Gate 4 deterministic test). Refuted an earlier over-pessimistic "YT Music blocks capture" conclusion.
 - 🟡 **Screen lock:** the audio-only capture *pipeline* survived a real keyguard lock (`onStop`=0, capture loop kept running) — but "non-silent audio still flowing after lock" is **not yet proven** (free YouTube pauses on lock). Tracked as milestone **M0.6**. Recorded as *tested-device behavior, not a cross-OEM platform guarantee*.
 - ✅ Control/media planes stood up locally; **web listener Gate 1 passed** (subscribe-only token → connects → `canPublish=false`, verified headlessly).

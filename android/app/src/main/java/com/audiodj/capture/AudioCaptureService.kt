@@ -103,15 +103,17 @@ class AudioCaptureService : Service() {
     private fun runPreflight() {
         try {
             val direct = java.nio.ByteBuffer.allocateDirect(1920)
-            android.util.Log.i("Gate26", "directBuffer.hasArray=${direct.hasArray()} isDirect=${direct.isDirect}")
-            log("directBuffer.hasArray=${direct.hasArray()} (direct is always false)")
+            // On Android/ART direct buffers DO have a backing array (hasArray()==true), unlike a desktop JVM.
+            log("directBuffer.hasArray=${direct.hasArray()} isDirect=${direct.isDirect}")
             val cap = io.livekit.android.audio.ScreenAudioCapturer(projection!!).apply { gain = 1.0f }
             val ok = cap.initAudioRecord(android.media.AudioFormat.ENCODING_PCM_16BIT, 2, 48_000)
-            val state = cap.javaClass.getDeclaredField("audioRecord").let {
-                it.isAccessible = true; (it.get(cap) as? android.media.AudioRecord)?.state
+            val ar = cap.javaClass.getDeclaredField("audioRecord").let {
+                it.isAccessible = true; it.get(cap) as? android.media.AudioRecord
             }
-            android.util.Log.i("Gate26", "screenAudioInit=$ok audioRecord.state=$state")
-            log("Gate2.6 screenAudioInit=$ok audioRecord.state=$state")
+            val state = ar?.state          // 1 = STATE_INITIALIZED
+            val recState = ar?.recordingState  // 3 = RECORDSTATE_RECORDING
+            android.util.Log.i("Gate26", "screenAudioInit=$ok state=$state recordingState=$recState")
+            log("Gate2.6 screenAudioInit=$ok state=$state recordingState=$recState")
             cap.releaseAudioResources()
         } catch (e: Exception) {
             android.util.Log.e("Gate26", "preflight EXCEPTION", e)
