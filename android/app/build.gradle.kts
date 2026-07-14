@@ -19,7 +19,7 @@ android {
     defaultConfig {
         applicationId = "com.audiodj.capture"
         minSdk = 29          // AudioPlaybackCapture requires API 29 (Android 10)
-        targetSdk = 35
+        targetSdk = 36       // Gate 2.5: exercise Android 16 target-API behavior changes
         versionCode = 1
         versionName = "0.1-spike"
         buildConfigField("String", "DEV_TOKEN_API", "\"${localProps.getProperty("dev.token.api") ?: ""}\"")

@@ -48,8 +48,18 @@ screenAudioInit=true  audioRecord.state=1 (INITIALIZED)
 Reusable dev-note: on Android, `ByteBuffer.allocateDirect().hasArray()` is `true`; do not assume JVM semantics.
 (Preflight path: `AudioCaptureService.ACTION_PREFLIGHT` → `runPreflight()`.)
 
+## Gate 2.5 — targetSdk 35→36 regression ✅ PASS (isolated commit, only targetSdk changed)
+Re-ran on `targetSdk 36` (Pixel 8 Pro / Android 16); **identical to target 35, zero regressions:**
+| check | target 35 | target 36 |
+|---|---|---|
+| capture start (MediaProjection permission flow) | ✓ | ✓ |
+| YouTube capture (AUDIO) | −16.4 dBFS | −16.2 / −20.6 dBFS ✓ |
+| M0.5 lock survival (onStop=0) | ✓ | ✓ (keyguard=true, 14 level lines, onStop=0) |
+| capture stop/start ×2 + FGS cleanup | ✓ | ✓ (fg services 1→0→1→0) |
+| Gate 2 signaling (join/leave/reconnect) | ✓ | ✓ |
+
 ## Not yet done
-- **Gate 2.5** targetSdk 35→36 isolated regression (rerun capture / permission / M0.5 lock / capture stop-start×2 / Gate 2 / FGS cleanup; keep target-35 vs target-36 results separate). Then add `AudioOptions(disableAudioPrewarming=true)` + rerun Gate 2.
+- **Gate 2.5b** add `AudioOptions(disableAudioPrewarming=true)` (separate commit) + rerun Gate 2 (confirm mode=NORMAL, zero tracks, no RECORD_AUDIO activity).
 - **Gate 3** first audible publish (Path B: audio-only MediaProjection → ScreenAudioCapturer → LocalAudioTrack; experiments B1/B2). Before Gate 3: bump `targetSdk 36` + rerun capture/lock/permission tests; add `disableAudioPrewarming` (verify AudioOptions param), verify `setAudioRecordEnabled(false)` still fires the buffer callback.
 - **Gate 4** deterministic L/R stereo isolation.
 - **Gate 5** Bluetooth A2DP + true-lock non-silent (M0.6) + 15-min stability + lifecycle.
