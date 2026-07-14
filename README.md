@@ -7,8 +7,8 @@ A private, small-group **"pass the aux, live"** app: the **host's Android phone 
 
 ## Status (2026-07-13)
 
-**On-device empirical results — Google Pixel 8 Pro / Android 16 (the strictest current OS):**
-- ✅ `AudioPlaybackCapture` captures playing audio — **plain YouTube** (RMS −16.4 dBFS) and **YouTube Music** (−15.3 dBFS), **true stereo**. (Refuted an earlier over-pessimistic "YT Music blocks capture" conclusion.)
+**On-device empirical results — Google Pixel 8 Pro, Android 16, app targeting API 35** (Android-16 behaviors that apply only to apps *targeting* API 36 are not yet exercised — retest at `targetSdk 36` before Gate 3):
+- ✅ `AudioPlaybackCapture` captures playing audio — **plain YouTube** (RMS −16.4 dBFS) and **YouTube Music** (−15.3 dBFS), **stereo PCM with non-identical L/R** (end-to-end channel isolation not yet verified — awaits the Gate 4 deterministic test). Refuted an earlier over-pessimistic "YT Music blocks capture" conclusion.
 - 🟡 **Screen lock:** the audio-only capture *pipeline* survived a real keyguard lock (`onStop`=0, capture loop kept running) — but "non-silent audio still flowing after lock" is **not yet proven** (free YouTube pauses on lock). Tracked as milestone **M0.6**. Recorded as *tested-device behavior, not a cross-OEM platform guarantee*.
 - ✅ Control/media planes stood up locally; **web listener Gate 1 passed** (subscribe-only token → connects → `canPublish=false`, verified headlessly).
 
@@ -45,5 +45,9 @@ Requires: `livekit-server` (v1.13.3), Node 20+, Android SDK (for the host). Dev 
 
 ## Notes for a reviewer
 - Distribution = **sideload APK, not Google Play** (removes Play-policy concerns for the capture app).
-- Legal/licensing is a **flagged risk, not a blocker** for a private, no-recording, sideloaded, few-friends tool; see `docs/05`. Product must decide a source/rights model before any public/commercial launch.
-- Hard rule for the LiveKit integration: **do NOT copy the official screenshare-audio example verbatim** (it publishes screen video + a mic track, which creates a VirtualDisplay and can break the audio-only lock-screen behavior and Bluetooth A2DP). Product path = build `ScreenAudioCapturer` directly from the existing audio-only `MediaProjection`, no video, no mic, gain=1.0.
+- Legal/licensing: **lower but non-zero risk** for a private, no-recording, sideloaded, few-friends prototype; **no legal conclusion is made here** (see `docs/05`). Sideloading avoids Google Play *distribution review* only — it does **not** resolve source-platform terms, music-rights, or other Android/distribution constraints. A source/rights model must be decided before any public/commercial launch.
+- Hard rule for the LiveKit integration: **do NOT copy the official screenshare-audio example verbatim** (it publishes screen video + a mic track, which creates a VirtualDisplay and can break the audio-only lock-screen behavior and Bluetooth A2DP). Product path = build `ScreenAudioCapturer` directly from the existing audio-only `MediaProjection`, no video, no mic, gain=1.0. See `docs/adr/0002-audio-only-mediaprojection.md` — `LocalAudioTrack` may still be used as transport plumbing; "no mic" means no physical microphone samples are captured or transmitted.
+
+## License
+
+**No license is granted.** This repository is made **source-visible for review only** (all rights reserved). Public visibility does **not** grant permission to reuse, modify, or redistribute the source. A license may be chosen later.

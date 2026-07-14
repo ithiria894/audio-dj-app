@@ -1,6 +1,14 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+}
+
+// Dev-only config from local.properties (gitignored) — keeps the LAN IP out of the public repo.
+val localProps = Properties().apply {
+    val f = rootProject.file("local.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
 }
 
 android {
@@ -14,6 +22,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "0.1-spike"
+        buildConfigField("String", "DEV_TOKEN_API", "\"${localProps.getProperty("dev.token.api") ?: ""}\"")
     }
 
     buildTypes {
@@ -24,10 +33,16 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions { jvmTarget = "17" }
+    buildFeatures { buildConfig = true }
+    packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
 }
 
 dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
+    // Gate 2+: LiveKit RTC (signaling now; ScreenAudioCapturer publish at Gate 3)
+    implementation("io.livekit:livekit-android:2.27.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 }

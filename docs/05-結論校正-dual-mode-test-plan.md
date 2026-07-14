@@ -1,7 +1,7 @@
 # 結論校正 + Dual-Mode 架構 + 落機測試計劃(權威版)
 
 > 呢份 supersede `02-feasibility-report.md` 同 `03-competitive-report.md` 入面**過度肯定嘅結論**。
-> 起因:Nicole 帶咗一份高質 critique(附 12 條一手 source)。判斷:**研究方向 7/10,結論校準 4/10** —— 即係 workflow 捉到兩個真風險,但將「高風險、要實測/要律師」寫成咗「技術多數唔得、法律必死」。以下係校正後嘅立場。研究方法(raw JSON、query、scripts)全部喺 `research/`,本地可審。
+> 起因:the founder 帶咗一份高質 critique(附 12 條一手 source)。判斷:**研究方向 7/10,結論校準 4/10** —— 即係 workflow 捉到兩個真風險,但將「高風險、要實測/要律師」寫成咗「技術多數唔得、法律必死」。以下係校正後嘅立場。研究方法(raw JSON、query、scripts)全部喺 `research/`,本地可審。
 
 ## 校正對照表(採納 critique)
 

@@ -6,7 +6,7 @@
 
 ## 0. Changelog
 - **2026-07-13** v0.1 初稿。已完成:需求、雙 workflow 研究(技術+競品)、結論校正、Android capture spike **落機實測(Pixel 8 Pro/Android 16)**。
-- **2026-07-13** v0.2(Nicole 拍板):鎖屏結論 wording 修正(pipeline 存活 ≠ 鎖屏後仍有非靜音音流;拆出 M0.6);Stage 0 拆成 **0A LAN 驗證 / 0B 公網實測**;0A 用 `livekit-server --dev` 唔用 Docker-first、plain web listener 唔做 PWA、debug cleartext config;採納嚴格 0A acceptance(deterministic stereo 測試檔 + hash + BT + lock-through source + lifecycle);LiveKit Cloud 降為 **diagnostic 對照組**,own-it VPS 為正式目標。
+- **2026-07-13** v0.2(the founder 拍板):鎖屏結論 wording 修正(pipeline 存活 ≠ 鎖屏後仍有非靜音音流;拆出 M0.6);Stage 0 拆成 **0A LAN 驗證 / 0B 公網實測**;0A 用 `livekit-server --dev` 唔用 Docker-first、plain web listener 唔做 PWA、debug cleartext config;採納嚴格 0A acceptance(deterministic stereo 測試檔 + hash + BT + lock-through source + lifecycle);LiveKit Cloud 降為 **diagnostic 對照組**,own-it VPS 為正式目標。
 
 ---
 
@@ -26,15 +26,15 @@
 
 ## 2. 已實錘嘅事實(de-risk 成果,Pixel 8 Pro / Android 16)
 呢啲唔再係 hypothesis,係落機數據(`docs/06` + `research/results/*.wav`):
-1. ✅ **Android `AudioPlaybackCapture` capture 到播緊嘅聲** —— 普通 YouTube(RMS -16.4dBFS)、YouTube Music(-15.3dBFS),**真立體聲**。
+1. ✅ **Android `AudioPlaybackCapture` capture 到播緊嘅聲** —— 普通 YouTube(RMS -16.4dBFS)、YouTube Music(-15.3dBFS),**stereo PCM(L/R 非完全相同)**。
 2. 🟡 **鎖屏:pipeline 存活已證,但「非靜音音流」未證**(M0.5 ✅ / M0.6 ⏳)。Pixel 8 Pro/Android 16 真鎖屏(`isKeyguardShowing=true`)期間:`AudioRecord`+level loop 繼續、`MediaProjection.onStop` 0 次 = **水管冇斷**。但因免費 YouTube 鎖屏自己暫停,capture 收到 -120dBFS = **未證「鎖屏後仲有水流」**。**要用鎖屏會繼續播嘅 source(本地/VLC/YTM Premium/ExoPlayer 測試源)+ 鎖屏 ≥5 分鐘 + 遠端 listener 持續收到非靜音,先算 PASS。** 記做**已測裝置行為,唔係跨 OEM/版本平台保證**(Android 官方文件仍寫 15 QPR1+ 一般 MediaProjection 鎖屏會停)。
-3. ✅ capture 側係 true stereo(mono 隱憂只喺下游 LiveKit publish path,Stage 0A 驗)。
+3. 🟡 capture 輸出係 stereo PCM、L/R 非完全相同 —— 但普通音樂 L−R 有差異**未足以單獨證明**「無左右互換 / 無大量 crossfeed / 真 channel isolation / 下游無 downmix 再 upmix」。端到端 channel isolation 待 deterministic 測試檔(Gate 4);mono 隱憂喺下游 LiveKit publish path。
 
-**推翻咗** feasibility 個「YTM opt-out 靜音」悲觀結論(Nicole 引 AudioRelay 相容表先啱)。教訓:落機實測係唯一裁決,唔好將「高風險」寫成「技術唔得」。
+**推翻咗** feasibility 個「YTM opt-out 靜音」悲觀結論(the founder 引 AudioRelay 相容表先啱)。教訓:落機實測係唯一裁決,唔好將「高風險」寫成「技術唔得」。
 
 ---
 
-## 3. 架構 —— Two Planes(Nicole 定案,採納)
+## 3. 架構 —— Two Planes(the founder 定案,採納)
 
 ```
                           ┌──→ Friend A  (PWA listener)
@@ -50,7 +50,7 @@
 ```
 
 **兩個 backend 分清楚:**
-- **Media plane = LiveKit SFU** — 真正轉送音樂。SFU = 低延遲 router,唔混音唔重編碼。**要長開**(Cloud 或自架 VPS)。手機喺街直連線上 LiveKit,**Nicole 唔使長開屋企電腦**。
+- **Media plane = LiveKit SFU** — 真正轉送音樂。SFU = 低延遲 router,唔混音唔重編碼。**要長開**(Cloud 或自架 VPS)。手機喺街直連線上 LiveKit,**the founder 唔使長開屋企電腦**。
 - **Control plane = 自己個細 API** — 只開房 / 派短期 LiveKit JWT / 驗 invite / 控制 pass-DJ / 房過期。**唔 proxy / decode / record / buffer / store 任何音訊。** 幾乎冇流量,serverless 都得。
 
 **Host 一定 native**(AudioPlaybackCapture 係 Android API,web/PWA/Capacitor 都做唔到 host capture)。**Listener 用 PWA**(撳 link 即聽,最啱)。
@@ -67,7 +67,7 @@
 | Host capture→RTC | **LiveKit Android SDK `ScreenAudioCapturer`**(底層 = AudioPlaybackCapture) | 官方有 `examples/screenshare-audio`,唔使手接 raw PCM 入 WebRTC(用官方 SDK 唔由零砌) |
 | Listener | **React + TypeScript + Vite + `livekit-client` + `@livekit/components-react` + vite-plugin-pwa** | 撳 link 即入房;`StartAudio` component 處理 browser autoplay 限制 |
 | Control API | **Node + TypeScript + Fastify + Zod + LiveKit Server SDK** | 細、AI 易維護;token 一定 server 出(secret 不可入 client) |
-| DB | **無(Stage 0-1)**;需要時 Postgres + Drizzle | 單 node MVP 唔使;房 state 短暫 |
+| DB | **無(到 Stage 0 為止)**;Stage 1 persistence/coordination **待定** | pass-DJ enforcement 前要揀:authoritative atomic room-state store(SQLite/Postgres/Redis + CAS)**或**單一長開 process + in-memory mutex 嘅短期 alpha。**冇 DB 就冇 room row 可鎖** |
 | Media transport | **LiveKit SFU** — Stage 0 Cloud,Alpha 自架 VPS | 換 endpoint 就得,client code 唔變 |
 | Infra(own-it) | **1 VPS:Docker Compose = LiveKit + embedded TURN + Caddy(HTTPS/WSS) + API** | 唔使 Redis(單 node)、唔使 k8s |
 
@@ -110,7 +110,8 @@ Token grants:
 - **Listener:** `canSubscribe=true, canPublish=false`
 - **Active DJ:** `canSubscribe=true, canPublish=true, canPublishSources=["screen_share_audio"]`
 
-**Pass DJ(A→B):** ①API 鎖 room row ②A `canPublish=false`(LiveKit 自動 unpublish A 條 track)③B `canPublish=true` ④更新 `activeDjIdentity` ⑤通知全房 ⑥B 開始 Android capture。即使有人改 client code 都唔可以偷偷同時播。
+**Pass DJ(A→B):** ①API atomic 鎖 active-DJ state ②A `canPublish=false`(LiveKit 自動 unpublish A 條 track)③B `canPublish=true` ④更新 `activeDjIdentity` ⑤通知全房 ⑥B 開始 Android capture。即使有人改 client code 都唔可以偷偷同時播。
+- **⚠️ 前置:呢個「atomic 鎖」需要 §4 待定嘅 room-state store(Stage 1 決定);Stage 0 冇 pass-DJ enforcement。**
 - **⚠️ 風險:runtime 升 DJ(flip canPublish)有 bug 史(LiveKit swift #244 / js #1314)→ 跨 client 實測,唔當 clean。**
 
 ---
@@ -133,10 +134,10 @@ Token grants:
 
 ## 8. 私隱 / 法律 model
 - **唔錄音、唔開 LiveKit Egress、唔寫音訊落磁碟。** 房完 = 音訊冇咗。
-- **Sideload 分發,唔上 Google Play** → 冇 Play policy 顧慮。
+- **Sideload 分發** → 只避開 Google Play **上架審核**;**唔解決**音樂服務條款 / 版權 / Android 平台限制 / 其他分發渠道問題。
 - 私人、邀請制、無公開搜尋、無 content catalog、max 5 人 → 事實形態比公共電台溫和。
 - 風險排序(見 `docs/05`):ToS 執法 > store 審核(sideload 已減) > 來源改 capture policy(→ compat matrix + Sync Mode) > 版權/表演權 > 規模壓力。
-- **prototype/私人試 = 冇實務風險;正式公開/收費前先畀 music-licensing + platform-terms 律師睇 architecture。** 唔用 Accessibility/root/截藍牙硬繞。
+- **私人、邀請制、無錄音 prototype 預期比公開廣播嘅 exposure 低,但風險非零 —— 呢度唔下任何法律結論。** 正式公開/收費前先畀熟 music-licensing + platform-terms + 加/美數碼傳送法嘅律師睇 architecture。唔用 Accessibility/root/截藍牙硬繞。
 
 ---
 
@@ -196,6 +197,7 @@ Stage 2  Native listeners / background / Sync Mode           未開始
 6. **唔做**:accounts、chat、playlist、public room、pass-DJ、payment;**LAN 通過唔可以宣稱 Stage 0 完成**。
 
 **Stage 0B(0A 一通過即做):** 公網 VPS 自架 LiveKit(domain+可信TLS+embedded TURN+Caddy)→ host 5G、listener 另一網絡 → Wi-Fi↔5G handover、CGNAT、TURN fallback、2-3 listener、30 分鐘、背景/鎖屏、uplink bitrate/loss/jitter。
+- **Two-listener relative playout skew**(產品真正承諾 =「大家一齊聽」,唔止低 latency):播每秒一次 click/timestamp,兩部 listener 同時錄,比 offset。門檻:**目標 <250ms / 警告 250–500ms / 失敗持續 >500ms**。
 **Stage 1:** 私人房、invite link、max 5、pass DJ、request DJ、連線質素、音量 meter、「source 不支援」提示、text chat、reaction、房過期;加細 API(serverless,唔喺 media path)。
 **Stage 2:** native iOS/Android listener、可靠背景/鎖屏播、lock-screen controls、deep-link、Sync Mode。iOS host 排最後。
 

@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
-"""Drive agent Chrome (CDP :9223): open a fresh tab at URL, eval JS, print JSON result.
-Used for headless Stage 0A web verification (localhost secure context).
-Usage: uv run --with websocket-client python3 cdp.py <url> "<js_expr>" [wait_seconds]
+"""Drive agent Chrome (CDP :9223) — persistent tabs for Stage 0A web verification.
+suppress_origin=True is required (Chrome rejects a default Origin header on CDP).
+Port 9223 must stay localhost-only (see docs/dev/browser-automation.md).
+
+Subcommands (targetId persists across invocations, so open once then eval many times):
+  open  <url>              -> opens a tab, prints its targetId (does NOT close)
+  eval  <targetId> "<js>"  -> attaches to that tab, prints JSON result of the expr
+  close <targetId>         -> closes the tab
+  once  <url> "<js>" [wait]-> open, wait, eval, close (one-shot; default wait 5s)
 """
 import json, sys, time, urllib.request
 
@@ -33,35 +39,51 @@ class CDP:
                     raise RuntimeError(r["error"])
                 return r.get("result", {})
 
-    def open(self, url):
-        tid = self.send("Target.createTarget", {"url": "about:blank"})["targetId"]
-        sid = self.send("Target.attachToTarget", {"targetId": tid, "flatten": True})["sessionId"]
-        self.send("Page.enable", sid=sid)
-        self.send("Runtime.enable", sid=sid)
-        self.send("Page.navigate", {"url": url}, sid=sid)
-        self._sid, self._tid = sid, tid
+    def create(self, url):
+        return self.send("Target.createTarget", {"url": url})["targetId"]
 
-    def eval(self, expr):
+    def attach(self, tid):
+        sid = self.send("Target.attachToTarget", {"targetId": tid, "flatten": True})["sessionId"]
+        self.send("Runtime.enable", sid=sid)
+        return sid
+
+    def eval(self, sid, expr):
         r = self.send("Runtime.evaluate",
-                      {"expression": expr, "awaitPromise": True, "returnByValue": True},
-                      sid=self._sid)
+                      {"expression": expr, "awaitPromise": True, "returnByValue": True}, sid=sid)
         if r.get("exceptionDetails"):
             return {"__exception__": json.dumps(r["exceptionDetails"])[:400]}
         return r["result"].get("value")
 
-    def close(self):
-        try:
-            self.send("Target.closeTarget", {"targetId": self._tid})
-        except Exception:
-            pass
+    def close_target(self, tid):
+        self.send("Target.closeTarget", {"targetId": tid})
+
+    def ws_close(self):
         self.ws.close()
 
 
-if __name__ == "__main__":
-    url, expr = sys.argv[1], sys.argv[2]
-    wait = float(sys.argv[3]) if len(sys.argv) > 3 else 5.0
+def main():
+    cmd = sys.argv[1]
     c = CDP()
-    c.open(url)
-    time.sleep(wait)
-    print(json.dumps(c.eval(expr)))
-    c.close()
+    try:
+        if cmd == "open":
+            print(c.create(sys.argv[2]))
+        elif cmd == "eval":
+            tid = sys.argv[2]
+            print(json.dumps(c.eval(c.attach(tid), sys.argv[3])))
+        elif cmd == "close":
+            c.close_target(sys.argv[2])
+            print("closed")
+        elif cmd == "once":
+            wait = float(sys.argv[4]) if len(sys.argv) > 4 else 5.0
+            tid = c.create(sys.argv[2])
+            time.sleep(wait)
+            print(json.dumps(c.eval(c.attach(tid), sys.argv[3])))
+            c.close_target(tid)
+        else:
+            print("unknown subcommand", cmd)
+    finally:
+        c.ws_close()
+
+
+if __name__ == "__main__":
+    main()

@@ -19,14 +19,16 @@ Empirical, on-device evidence for `AudioPlaybackCapture`. Not web reports. Repro
 
 Method: play a source, read a live RMS meter from the captured 48 kHz stereo PCM, save a 10 s WAV, compute RMS + L/R correlation.
 
-| Source | Result | RMS | Peak | Stereo | Evidence |
+| Source (app version) | Result | RMS | Peak | Channels | 10s clip SHA-256 (not committed) |
 |---|---|---|---|---|---|
-| Plain YouTube (app) | ✅ CAPTURED | −16.4 dBFS | −1.2 dBFS | TRUE STEREO (L−R = −20.8 dB) | `research/results/capture-test-youtube.wav` |
-| YouTube Music | ✅ CAPTURED | −15.3 dBFS | 0.0 dBFS | TRUE STEREO (L−R = −23.7 dB) | `research/results/capture-test-ytmusic.wav` |
+| Plain YouTube 21.26.364 | ✅ CAPTURED | −16.4 dBFS | −1.2 dBFS | stereo, L/R non-identical (L−R = −20.8 dB) | `49008f13…21ba8` |
+| YouTube Music 9.26.55 | ✅ CAPTURED | −15.3 dBFS | 0.0 dBFS (⚠ near clip) | stereo, L/R non-identical (L−R = −23.7 dB) | `e486ea8a…bed5b` |
 | Spotify | ⬜ not tested | — | — | — | founder has no account |
-| Local player / VLC / podcast | ⬜ not tested | — | — | — | pending (needed for M0.6, see §2) |
+| Local player / VLC / podcast | ⬜ not tested | — | — | — | pending (needed for M0.6, §2) |
 
-Note: this **refutes** an earlier web-report-based claim that YouTube Music opts out of `AudioPlaybackCapture` and yields silence. On this device/OS it captures cleanly. Capture policy is source-app + OS-version + OEM dependent, so this is per-device evidence, not a universal guarantee — maintain this matrix.
+- **Channel wording:** "L/R non-identical" is what the data shows. Ordinary music having L≠R does **not** yet prove no L/R swap, no crossfeed, true channel isolation, or no downstream downmix/upmix. **End-to-end channel isolation is verified only by the Gate-4 deterministic left/right tone test** — until then do not claim "true stereo".
+- **Copyright:** the captured WAVs are **not committed** (gitignored — they are ~10 s of copyrighted recordings). Only derived metrics + SHA-256 are published here. A synthetic left/right tone file will be committed for reproducible channel-isolation testing.
+- **⚠ Refutes** an earlier web-report claim that YouTube Music opts out and yields silence — on this device/version it captures. Capture policy is source-app + OS-version + OEM + app-version dependent, so this is per-device evidence, **not** a universal guarantee — maintain this matrix.
 
 ## 2. Screen-lock experiment (the make-or-break)
 

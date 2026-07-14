@@ -1,13 +1,14 @@
 // Stage 0A dev token endpoint (control plane). DEVELOPMENT ONLY — trusted LAN, no port-forward.
 // devkey/secret live ONLY here on the dev machine — never in the APK or web bundle.
 // GET/POST /dev/token?identity=&role=dj|listener  -> { url, token, room, identity, role }
-// Guardrails (per Nicole): fixed room, role allowlist, short TTL, sanitized identity.
+// Guardrails (per the founder): fixed room, role allowlist, short TTL, sanitized identity.
 import { AccessToken } from 'livekit-server-sdk'
 import http from 'node:http'
 
 const API_KEY = process.env.LK_API_KEY || 'devkey'
 const API_SECRET = process.env.LK_API_SECRET || 'secret'
-const LK_URL = process.env.LK_URL || 'ws://10.0.0.247:7880'
+// dev-up.sh passes the real LAN IP via LK_URL. Do NOT hard-code a home LAN IP in a public repo.
+const LK_URL = process.env.LK_URL || 'ws://127.0.0.1:7880'
 const PORT = process.env.PORT || 8790
 const ROOM = 'stage0'                    // fixed — do not accept arbitrary rooms
 const ROLES = new Set(['dj', 'listener']) // allowlist — no "admin" etc.
@@ -30,6 +31,8 @@ http.createServer(async (req, res) => {
   const u = new URL(req.url, 'http://x')
   res.setHeader('access-control-allow-origin', '*')
   res.setHeader('x-env', 'development-only')
+  res.setHeader('Cache-Control', 'no-store')
+  res.setHeader('Pragma', 'no-cache')
   if (u.pathname !== '/dev/token') { res.statusCode = 404; return res.end('not found') }
   const role = u.searchParams.get('role') || 'listener'
   if (!ROLES.has(role)) { res.statusCode = 400; return res.end(JSON.stringify({ error: 'role must be dj|listener' })) }

@@ -15,6 +15,8 @@ function report(extra: Record<string, unknown> = {}) {
     canSubscribe: lp?.permissions?.canSubscribe ?? null,
     identity: lp?.identity ?? null,
     remoteParticipants: room.remoteParticipants.size,
+    identities: [...room.remoteParticipants.values()].map((p: any) => p.identity),
+    remoteTracks: [...room.remoteParticipants.values()].reduce((n: number, p: any) => n + p.trackPublications.size, 0),
     ts: performance.now() | 0,
     ...extra,
   }

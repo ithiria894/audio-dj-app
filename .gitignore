@@ -18,7 +18,7 @@ CLAUDE.local.md
 services/api/.env
 **/.env
 
-# Nicole's private ChatGPT conversation — not for public repo
+# the founder's private ChatGPT conversation — not for public repo
 docs/chatgpt-requirements-transcript.md
 
 # research capture artifacts (large binaries)
@@ -28,3 +28,14 @@ scratch/
 # python cache
 __pycache__/
 *.pyc
+
+# signing / packaged apps / IDE / OS
+*.jks
+*.keystore
+keystore.properties
+*.apk
+*.aab
+.idea/
+.DS_Store
+.env.*
+!.env.example

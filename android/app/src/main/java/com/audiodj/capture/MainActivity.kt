@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -30,7 +31,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var stopBtn: Button
     private lateinit var saveBtn: Button
     private lateinit var mpm: MediaProjectionManager
+    private lateinit var gate2: Gate2LiveKit
     private val ts = SimpleDateFormat("HH:mm:ss", Locale.US)
+    // dev.token.api comes from local.properties (gitignored) via BuildConfig — no LAN IP in source.
+    private val tokenApi = BuildConfig.DEV_TOKEN_API.ifEmpty { "http://127.0.0.1:8790/dev/token" }
 
     private val projLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
         if (res.resultCode == Activity.RESULT_OK && res.data != null) {
@@ -100,6 +104,15 @@ class MainActivity : AppCompatActivity() {
         saveBtn.setOnClickListener {
             startService(Intent(this, AudioCaptureService::class.java).setAction(AudioCaptureService.ACTION_SAVE))
         }
+        // Gate 2 — LiveKit connect-only (no capture, no publish)
+        gate2 = Gate2LiveKit(this) { m -> appendLog(m) }
+        findViewById<Button>(R.id.gate2ConnectBtn).setOnClickListener {
+            gate2.connect(lifecycleScope, tokenApi)
+        }
+        findViewById<Button>(R.id.gate2DisconnectBtn).setOnClickListener {
+            gate2.disconnect()
+        }
+
         appendLog("ready. Tap 開始擷取, allow the prompt, then play music.")
     }
 

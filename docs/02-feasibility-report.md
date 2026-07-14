@@ -171,7 +171,7 @@ No single project does all of {cross-platform + over-internet + phone-first + tr
 
 ---
 
-## 8. Open DECISIONS for Nicole
+## 8. Open DECISIONS for the founder
 
 Each is framed as a crisp choice with a recommended default.
 
@@ -203,4 +203,4 @@ Options: (a) **Honest narrow scope** — rebroadcast local files + non-DRM sourc
 ---
 
 ### Bottom line
-Build it, Android-host + cross-platform-listener, on self-hosted LiveKit, audio-only so it survives the lock screen. The screen-lock make-or-break is **ACHIEVABLE** (verified across three AOSP code states, pending one on-device test). The real product-defining constraint is the **DRM capture wall**, which forces an honest scope pivot away from Spotify/Apple/YouTube Music toward local + non-DRM audio. Before writing architecture, run the three de-risking tests: **(1)** on-device screen-lock logcat, **(2)** apktool + live capture of the big three, **(3)** the custom-stereo-ADM spike. If (1) passes (expected) and you accept the (2) scope reality, the experience Nicole wants — rotating DJ, friends hearing the host's actual audio, cross-platform, street, screen-locked — is shippable.
+Build it, Android-host + cross-platform-listener, on self-hosted LiveKit, audio-only so it survives the lock screen. The screen-lock make-or-break is **ACHIEVABLE** (verified across three AOSP code states, pending one on-device test). The real product-defining constraint is the **DRM capture wall**, which forces an honest scope pivot away from Spotify/Apple/YouTube Music toward local + non-DRM audio. Before writing architecture, run the three de-risking tests: **(1)** on-device screen-lock logcat, **(2)** apktool + live capture of the big three, **(3)** the custom-stereo-ADM spike. If (1) passes (expected) and you accept the (2) scope reality, the experience the founder wants — rotating DJ, friends hearing the host's actual audio, cross-platform, street, screen-locked — is shippable.

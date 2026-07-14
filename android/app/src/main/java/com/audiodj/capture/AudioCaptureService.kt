@@ -53,6 +53,7 @@ class AudioCaptureService : Service() {
     private var projection: MediaProjection? = null
     private var record: AudioRecord? = null
     @Volatile private var running = false
+    @Volatile private var stopping = false
     @Volatile private var saveRemainingFrames = 0
     @Volatile private var saveBuf: ByteArrayOutputStream? = null
     private var worker: Thread? = null
@@ -69,11 +70,16 @@ class AudioCaptureService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_STOP -> { stopEverything(); stopSelf(); return START_NOT_STICKY }
-            ACTION_SAVE -> { requestSave(); return START_STICKY }
+            ACTION_SAVE -> { requestSave(); return START_NOT_STICKY }
         }
+        // A MediaProjection consent token cannot be recreated after process death, so never
+        // sticky-restart (that would deliver a null intent with no token).
+        if (intent == null) { log("null start intent (no projection token) — stopping"); stopSelf(); return START_NOT_STICKY }
+        if (running) { log("already capturing — ignoring duplicate START"); return START_NOT_STICKY }
+        stopping = false
         startForegroundCompat()
         try {
-            val rc = intent!!.getIntExtra(EXTRA_RESULT_CODE, Activity.RESULT_CANCELED)
+            val rc = intent.getIntExtra(EXTRA_RESULT_CODE, Activity.RESULT_CANCELED)
             val data: Intent? = if (Build.VERSION.SDK_INT >= 33)
                 intent.getParcelableExtra(EXTRA_DATA, Intent::class.java)
             else @Suppress("DEPRECATION") intent.getParcelableExtra(EXTRA_DATA)
@@ -88,7 +94,7 @@ class AudioCaptureService : Service() {
             log("START failed: ${e.javaClass.simpleName}: ${e.message}")
             stopSelf()
         }
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     private fun startCapture() {
@@ -116,7 +122,8 @@ class AudioCaptureService : Service() {
             record = r
             r.startRecording()
             running = true
-            if (!receiverRegistered) {
+            // DEBUG-ONLY test hook (adb-triggerable). Never exported in release builds.
+            if (BuildConfig.DEBUG && !receiverRegistered) {
                 ContextCompat.registerReceiver(this, saveReceiver, IntentFilter("com.audiodj.capture.DO_SAVE"), ContextCompat.RECEIVER_EXPORTED)
                 receiverRegistered = true
             }
@@ -133,8 +140,9 @@ class AudioCaptureService : Service() {
         var lastUi = 0L
         var lastLog = 0L
         while (running) {
-            val n = record?.read(buf, 0, buf.size) ?: -1
-            if (n <= 0) continue
+            val n = record?.read(buf, 0, buf.size) ?: -999
+            if (n < 0) { android.util.Log.e("AuxCapture", "AudioRecord.read error=$n — stopping capture loop"); log("AudioRecord.read error=$n"); break }
+            if (n == 0) continue
             var sumsq = 0.0
             var peak = 0
             for (i in 0 until n) {
@@ -203,12 +211,15 @@ class AudioCaptureService : Service() {
     }
 
     private fun stopEverything() {
+        if (stopping) return          // guard against projection.stop() -> onStop() re-entry
+        stopping = true
         running = false
-        try { worker?.join(500) } catch (_: Exception) {}
+        try { record?.stop() } catch (_: Exception) {}   // unblock any in-flight read() FIRST
+        try { worker?.join(800) } catch (_: Exception) {}
         worker = null
-        try { record?.stop() } catch (_: Exception) {}
         try { record?.release() } catch (_: Exception) {}
         record = null
+        try { if (receiverRegistered) { unregisterReceiver(saveReceiver); receiverRegistered = false } } catch (_: Exception) {}
         try { projection?.stop() } catch (_: Exception) {}
         projection = null
     }
