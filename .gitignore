@@ -1,0 +1,30 @@
+# deps / build
+node_modules/
+**/build/
+**/.gradle/
+**/dist/
+apps/android-host/app/build/
+android/app/build/
+android/.gradle/
+
+# dev runtime state (not reproducible artifacts)
+.run/
+logs/
+*.log
+
+# local secrets / machine-specific
+local.properties
+CLAUDE.local.md
+services/api/.env
+**/.env
+
+# Nicole's private ChatGPT conversation — not for public repo
+docs/chatgpt-requirements-transcript.md
+
+# research capture artifacts (large binaries)
+research/results/*.wav
+scratch/
+
+# python cache
+__pycache__/
+*.pyc

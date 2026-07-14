@@ -1,0 +1,8 @@
+{
+  "name": "audio-dj-api",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": { "dev-token": "node dev-token.mjs" },
+  "dependencies": { "livekit-server-sdk": "^2.9.0" }
+}

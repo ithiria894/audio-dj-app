@@ -1,0 +1,527 @@
+[
+ {
+  "title": "Looking for an app to translate bad english",
+  "sub": "androidapps",
+  "score": 0,
+  "comments": 5,
+  "intent": 16,
+  "url": "https://reddit.com/r/androidapps/comments/1hnlmi2/looking_for_an_app_to_translate_bad_english/",
+  "self": "I have a person that I talk to regularly but he's extremely hard to understand. He IS a native English speaker but he's in very bad health and kinda mumbles and runs his words together. Is there an app or tool that can listen and translate what he says to text? ",
+  "thread": {
+   "num_comments": 5,
+   "comments": [
+    {
+     "author": "BobTheCowComic",
+     "score": 3,
+     "body": "Chatgpt"
+    }
+   ]
+  }
+ },
+ {
+  "title": "[DEV] Is there an app to rid me of the freaking frustration of passing the aux cord in the car? Yes, there is :) JUKE PRO SALE",
+  "sub": "androidapps",
+  "score": 160,
+  "comments": 45,
+  "intent": 15,
+  "url": "https://reddit.com/r/androidapps/comments/73k3qk/dev_is_there_an_app_to_rid_me_of_the_freaking/",
+  "self": "I'm Rithwik, a 16 year old high school student from Plano, Texas. As an audiophile like many of you here, I listen to songs a lot. I made an app this summer that will rid you of frustration when your friends ask you to pass the aux cord.\nI made an SMS jukebox for Android \n\nCar rides- You can connect your phone to the car's stereo and everyone can access it. \"Pass the aux cord\" is a thing of the past with Juke. Juke is an invisible infinity aux cord. Passengers send you a text message of their favorite song. (They don't need to install anything)\n\n\nParties - Host a party and let guests send in song requests with an simple text message. Juke is a great replacement for an expensive DJ .\n\nThe revolutionary app - https://play.google.com/store/apps/details?id=com.techPath.rithwikpat.jukepro\n\nHow ",
+  "thread": {
+   "num_comments": 45,
+   "comments": [
+    {
+     "author": "pooish",
+     "score": 22,
+     "body": "i live in a country where everyone has unlimited data but no one has unlimited sms. i'm wondering if you're planning on supporting any IM apps or other web based communication methods in the future?"
+    },
+    {
+     "author": "justicecantakeanap",
+     "score": 13,
+     "body": "Pretty great indeed? Does this work with the \"add to queue\" of spotify? That would be absolutely neat. Kudos!"
+    },
+    {
+     "author": "ExplodedImp",
+     "score": 7,
+     "body": "What a great idea!"
+    },
+    {
+     "author": "saacker327",
+     "score": 5,
+     "body": "Seems like a good idea but what is the source of the music?  Where is it streaming from?"
+    },
+    {
+     "author": "[deleted]",
+     "score": 3,
+     "body": "[removed]"
+    },
+    {
+     "author": "[deleted]",
+     "score": 2,
+     "body": "deleted  ^^^^^^^^^^^^^^^^0.5375  [^^^What ^^^is ^^^this?](https://pastebin.com/FcrFs94k/39249)"
+    },
+    {
+     "author": "Sly_TheThief_Cooper",
+     "score": 2,
+     "body": "I won't say I'll ever use this app but I'm impressed that you've accomplished something like developing an app. Keep up the good work and I hope your app takes off!"
+    },
+    {
+     "author": "Karrowt",
+     "score": 2,
+     "body": "Hey I have a question. When I get a text that isn't related to a song choice it still gives me a notification that I got a text and I would like to disable that feature. Is there a way?"
+    },
+    {
+     "author": "[deleted]",
+     "score": 1,
+     "body": "Bought"
+    },
+    {
+     "author": "PM_ME_DICK_PICTURES",
+     "score": 1,
+     "body": "So how does it pick songs? Does it choose the first result off the top of YouTube?\n\n Can we send specific YouTube or SoundCloud links to play? And if we send multiple songs, will it play over the previous song or will it be queued up?"
+    },
+    {
+     "author": "Kai_Notice_Me",
+     "score": 1,
+     "body": "This is an awesome app!\n\nJust waiting on Spotify :)\n\nI noticed you had a beta, is it still open? If so, can I join in? :)"
+    },
+    {
+     "author": "Ejeocho",
+     "score": 1,
+     "body": "Just got it. Works awesome. Would like to try beta please. Is bogo still going on. Thanks"
+    },
+    {
+     "author": "Noexit",
+     "score": 1,
+     "body": "Bought. Impressed with the app, but more importantly I'm impressed with the dev. Keep up the good work!"
+    }
+   ]
+  }
+ },
+ {
+  "title": "How to listen to spotify with friends?",
+  "sub": "discordapp",
+  "score": 0,
+  "comments": 14,
+  "intent": 13,
+  "url": "https://reddit.com/r/discordapp/comments/180kan5/how_to_listen_to_spotify_with_friends/",
+  "self": "im streaming a game to friends, is there any way that we can listen to music together? any way to listen to music mutualy.",
+  "thread": {
+   "num_comments": 14,
+   "comments": [
+    {
+     "author": "Zeniua",
+     "score": 3,
+     "body": "If you have Spotify linked to your discord, when you play music a friend can click on your profile, and it will show what song ur listening to. Next to the song name it'll have a little button they can click that says \"listen along\""
+    },
+    {
+     "author": "UnaPersonaMiki",
+     "score": 1,
+     "body": "maybe use a music bot, like \"rythm\", just add it to your server  \nor you can use spotify but i think you need to have premium"
+    }
+   ]
+  }
+ },
+ {
+  "title": "I built (spotifybuddy.com) to listen to music together with others in real-time from anywhere in the world with a collaborative queue all on Spotify. Think Spotify's group session feature + Discord's listen along + easy link sharing/no need to download an app",
+  "sub": "spotify",
+  "score": 874,
+  "comments": 72,
+  "intent": 12,
+  "url": "https://reddit.com/r/spotify/comments/hvvv1y/i_built_spotifybuddycom_to_listen_to_music/",
+  "self": "[https://spotifybuddy.com](https://spotifybuddy.com/)\n\nHey \ud83d\udc4b I'm Jonathan, a student at UT Austin. Covid and shelter-in-place took away one of my favorite things to do: jamming out and listening to music with my friends.\n\nSo... I made Spotify Buddy to replicate those late-night music sessions in the car and connections made through listening to music together with people you care about.\u00a0I thought this would be the perfect place to post this since we're all Spotify fans. And I'm sure I'm not the only one who has always wanted a native listening along feature in Spotify that was easy and intuitive.\n\nPlease give me feedback and suggestions on what you all think. As Spotify power users, it will be super useful. Thanks!\n\nEDIT: No longer functional, Spotify shut us down because of heavy API usa",
+  "thread": {
+   "num_comments": 72,
+   "comments": [
+    {
+     "author": "FickleFred",
+     "score": 62,
+     "body": "I'm a big user of JQBX but have issues with the UI so I will say I love your UI. However, a few suggestions:\n\n  \n1.) Add the ability to add an entire playlist at once instead of having to manually add songs one at a time. Me and a buddy like to use this a lot while we work just trading songs but this one song at a time method requires too much active participation.\n\n2.) Implement a \"take turns\" mode. Right now my buddy could add 3 songs in a row (if he's trying to batch add and cut down the need to be actively engaging with it) but that means i have to wait for all those songs to play before mine does.\n\n3.) Add the ability to remove your songs from the queue if you are the one who added it. "
+    },
+    {
+     "author": "[deleted]",
+     "score": 36,
+     "body": "how does this benefit people that don't have friends."
+    },
+    {
+     "author": "pyromaniacrob",
+     "score": 18,
+     "body": "Thanks for sharing! What advantages does your site have over services like JQBX.fm?"
+    },
+    {
+     "author": "orgodeathmarch",
+     "score": 8,
+     "body": "This is awesome! I\u2019ve been wishing Spotify had this kind of feature for a while. Also, the webpage looks really nice. Well done!"
+    },
+    {
+     "author": "gvgvstop",
+     "score": 7,
+     "body": "Hey man, this is super cool, already got five of my friends to join a session today and we're all loving the app!"
+    },
+    {
+     "author": "ANonWittyNewbie",
+     "score": 7,
+     "body": "Dumb question but I'm guessing I need premium for this to work, right?"
+    },
+    {
+     "author": "____jules____",
+     "score": 4,
+     "body": "This sounds awesome. I just graduated from UT Austin, so hello! \ud83d\udc4b"
+    },
+    {
+     "author": "[deleted]",
+     "score": 3,
+     "body": "Bloody hell, that's clever! Nice one!"
+    },
+    {
+     "author": "jb0om",
+     "score": 3,
+     "body": "Love Spotify Buddy, but I think it's broken right now? It just loops back to the home page after logging in. Worked fine last week."
+    },
+    {
+     "author": "[deleted]",
+     "score": 2,
+     "body": "[deleted]"
+    },
+    {
+     "author": "krazzyboy123",
+     "score": 2,
+     "body": "This is awesome. Thank you!"
+    },
+    {
+     "author": "TheCrazedMadman",
+     "score": 2,
+     "body": "This is fantastic! I'm an avid JQBX user (aka. obsessed for 2 and 1/2 years) , but have been disappointed whenever I'm in a social setting and want people to add songs  to a communal queue. Getting my friends to download JQBX is a chore, and when they do get set up, someone usually gets stepped down after a few plays because people use their phones for other things. Cant wait to try it in my next party (or more likely, socially distanced party, lol).\n\nThank you so much! (second the suggestions /u/FickleFred mentioned)"
+    },
+    {
+     "author": "ridhey",
+     "score": 2,
+     "body": "Why can't people without premium use this?"
+    },
+    {
+     "author": "purrsnikitty",
+     "score": 2,
+     "body": "Super cool, thanks! Also thanks for actually making it screenreader accessible. That's unfortunately uncommon."
+    },
+    {
+     "author": "serose04",
+     "score": 2,
+     "body": "Cool site! I especially love how you don't need Spotify account at all to add songs to queue. That's gonna sort a few problems with friends who don't have Spotify but still want to control music as well at parties. Btw. I added your site to my huge list of sites, programs and apps that work with Spotify and/or [Last.fm](https://Last.fm). It's even pinned at r/spotify. Links [here](https://www.reddit.com/r/spotify/comments/htzlo1/list_of_spotifylastfm_stats_websites_and_not_just/) and [here](https://www.reddit.com/r/lastfm/comments/htzomy/list_of_spotifylastfm_stats_websites_and_not_just/)."
+    }
+   ]
+  }
+ },
+ {
+  "title": "[Dev] I'm making an app to listen to podcasts and audio dramas with your friends.",
+  "sub": "androidapps",
+  "score": 67,
+  "comments": 23,
+  "intent": 12,
+  "url": "https://reddit.com/r/androidapps/comments/6kcgsa/dev_im_making_an_app_to_listen_to_podcasts_and/",
+  "self": "Hi /r/androidapps! As the title says, I'm currently working on an app to let friends listen to podcasts together. I've put together [a survey](https://docs.google.com/forms/d/e/1FAIpQLSeFjVcNc3LcGTJSkpCJ86cNu8x0n-0P95kpXiv0QNbxfAgEvg/viewform?usp=sf_link) to get feedback and a better sense of what my future users want. It would help me a lot if you would fill it out! Make sure to read the header to get an idea of how the app works.\n\nSo far, only 28.6% of respondents are Android users. However, because the main purpose of the project is to get experience as an Android dev, the Android version *is* happening first. So it would help me a lot to get some more responses from the Android community!\n\nIf you're interested, the survey has a place to leave an email address, which I will email when t",
+  "thread": {
+   "num_comments": 23,
+   "comments": [
+    {
+     "author": "Pyro979",
+     "score": 5,
+     "body": "Filled out the survey. Nice idea, but I'm not sure most people would use this."
+    },
+    {
+     "author": "LSUTrainerMatt",
+     "score": 2,
+     "body": "Filled out the survey. Interesting idea. Will definitely try it out when you release it."
+    },
+    {
+     "author": "foundfootagefan",
+     "score": 2,
+     "body": "This would actually be pretty innovative. It would make podcasts more like watching TV or movies with your friends or family. Most people wouldn't think to do this because podcasts aren't live broadcasts but I can see some people wanting to sync up with other people to listen to the latest episode of the newest hit podcast.\n\nSurvey filled out. Good luck with your project. "
+    },
+    {
+     "author": "awhawkeye",
+     "score": 2,
+     "body": "I have actually always thought about this for podcasts, YouTube, web browsing. Podcast especially because it would let the less tech savvy jump right in before following ten steps to get a podcast client and find the feed. Good luck!!"
+    },
+    {
+     "author": "pcoyuncy",
+     "score": 2,
+     "body": "I filled out the survey, Interesting idea, it will be useful if the app will have a solid architecture"
+    },
+    {
+     "author": "eandi",
+     "score": 2,
+     "body": "We built the same type of thing but for Netflix awhile ago. Just... Don't expect it to go big. It'll be fun to develop but the market for these sync up things is just not good and you can't grow quickly because usage needs to be synchronous."
+    },
+    {
+     "author": "CaptainRene",
+     "score": 1,
+     "body": "So like one of those youtube-sync sites?"
+    },
+    {
+     "author": "glyko",
+     "score": 1,
+     "body": "Unfortunately I'm the only one of my friends that's into podcasts :("
+    }
+   ]
+  }
+ },
+ {
+  "title": "\"Brick\" \u2014 An app that lets you visualize your growth journey as a building, brick by brick \u2014 and explore how successful people actually built theirs",
+  "sub": "SomebodyMakeThis",
+  "score": 8,
+  "comments": 9,
+  "intent": 12,
+  "url": "https://reddit.com/r/SomebodyMakeThis/comments/1rtw7i7/brick_an_app_that_lets_you_visualize_your_growth/",
+  "self": "We all do it. We watch YouTube videos, read books by successful people, listen to podcasts all trying to piece together our own path. But here's the thing: nobody can actually *see* their path being built. You consume all this content, take all these steps, make mistakes, have wins  and it all just\u2026 disappears into the void. You can't look back and see the structure you've been building.\n\nThat's the idea behind **Brick,** an app where your personal growth journey becomes a literal building, constructed brick by brick.\n\n**Think of it like GitHub's contribution graph, but for your life.** On GitHub, every commit adds a green square, and over time you see your coding activity take shape. Brick does the same thing \u2014 except instead of commits, you're logging real life progress, and instead of a",
+  "thread": {
+   "num_comments": 9,
+   "comments": [
+    {
+     "author": "commutingonaducati",
+     "score": 3,
+     "body": "Thanks chatgpt."
+    },
+    {
+     "author": "iMakeSense",
+     "score": 1,
+     "body": "People aren't vulnerable enough, consistent enough, or interested enough that an app like this could be viable. Successful people tend to do this IRL and network in person. People get more dopamine from flexing the results than showing their struggle."
+    },
+    {
+     "author": "BotBreaker105",
+     "score": 1,
+     "body": "Well, I'm sure those type of \"tracker\" or habits apps need someone willing to install it, check it and use it enough to do something. In my case, it's too tedious to every time I do something log it in an app."
+    },
+    {
+     "author": "[deleted]",
+     "score": 1,
+     "body": "I would love to build communities around different brick building activities like music or learning a hobby. This is an exciting visual tool for a community and accountability buddies. Love it. Can we talk?"
+    }
+   ]
+  }
+ },
+ {
+  "title": "music bot, people change volume to 200% can i stop this?",
+  "sub": "discordapp",
+  "score": 1,
+  "comments": 2,
+  "intent": 12,
+  "url": "https://reddit.com/r/discordapp/comments/jl8qvz/music_bot_people_change_volume_to_200_can_i_stop/",
+  "self": "hi all, so i'm in a discord with a bunch of friends, we have some music bots so we can listen to music together when we are playing games.  Usually the bot volume is only at 10-20% but people can change it to 200% by just using a command, which is obviously super loud and i really hate it.  is there a way i can change this so other people cant change the volume for me so i dont have to just mute the music bots at all time?",
+  "thread": {
+   "num_comments": 2,
+   "comments": [
+    {
+     "author": "bluewave41",
+     "score": 1,
+     "body": "Unless the bot has a feature for this built in then no."
+    },
+    {
+     "author": "dan8630",
+     "score": 1,
+     "body": "What bot?"
+    }
+   ]
+  }
+ },
+ {
+  "title": "Social extension of Spotify that allows you to share music, listen together and meet new people, both virtually and IRL",
+  "sub": "spotify",
+  "score": 129,
+  "comments": 31,
+  "intent": 11,
+  "url": "https://reddit.com/r/spotify/comments/t79025/social_extension_of_spotify_that_allows_you_to/",
+  "self": "I love the group mode feature of Spotify, and use it with friends quite a bit, but the limit of 5 friends, and the fact that people who I don't share the link with can't join is a bummer. Moreover, when I share music with a friend they need to have Spotify too.\n\nMusic I feel is a great way to connect with people, and form genuine friendships. I love jqbx, [last.fm](https://last.fm) etc. for this but all of them lack something or the other, so I built an app myself that allows you to:  \n\n\n* Listen to music with people in real time, and chat\n* Share music with friends from within the app regardless of the streaming service they are on\n* Meet new people via public listening sessions\n* It works both virtually, and with friends IRL\n\nIf anyone is interested in using this, please sign up via this",
+  "thread": {
+   "num_comments": 31,
+   "comments": [
+    {
+     "author": "[deleted]",
+     "score": 21,
+     "body": "[deleted]"
+    },
+    {
+     "author": "SsquaredplusA",
+     "score": 7,
+     "body": "Downloading as well. Always down to check out a new music app"
+    },
+    {
+     "author": "miichaeljohn",
+     "score": 5,
+     "body": "Huge fan of last.fm and it\u2019s features, downloading this app now. Great idea"
+    },
+    {
+     "author": "seasonchanger",
+     "score": 5,
+     "body": "Tried for a bit and met some great people there! Excellent idea, thanks for sharing!"
+    },
+    {
+     "author": "xroomie",
+     "score": 2,
+     "body": "Www.JQBX.fm"
+    },
+    {
+     "author": "boibrainiac",
+     "score": 2,
+     "body": "do i need spotify premium for this cus there's no other way to connect"
+    },
+    {
+     "author": "ph_maneiro",
+     "score": 2,
+     "body": "i love lastfm"
+    },
+    {
+     "author": "jedrevolutia",
+     "score": 2,
+     "body": "I have used last.fm long before I use Spotify, lol."
+    },
+    {
+     "author": "itsaride",
+     "score": 1,
+     "body": "Awesome flair..white on off-white on white. \n\nhttps://old.reddit.com/r/spotify/comments/t79025/social_extension_of_spotify_that_allows_you_to/"
+    },
+    {
+     "author": "hjbardenhagen",
+     "score": 1,
+     "body": "Is [Last.fm](https://Last.fm) integrated somehow in your app e.g. by using their API? It's not obvious to me, but as I see a Discord invitation link to your server, there also is an inofficial [Last.fm](https://Last.fm) Discord server which gets used by thousands of [Last.fm](https://Last.fm) users offering Spotify integration, bots showing and comparing [Last.fm](https://Last.fm) statistics of users, enabling a related \"Crowns Game\" etc. And there is r/lastfm of course as well as their [official support forum](https://support.last.fm/) with FAQs, user suggestions et al."
+    }
+   ]
+  }
+ },
+ {
+  "title": "Ways to listen to music together?",
+  "sub": "LongDistance",
+  "score": 3,
+  "comments": 12,
+  "intent": 11,
+  "url": "https://reddit.com/r/LongDistance/comments/b7m3sd/ways_to_listen_to_music_together/",
+  "self": " Our fav band will be releasing a new album soon-ish and I was wondering if there are any apps for this? We'll most likely have the songs downloaded, or on spotify. ",
+  "thread": {
+   "num_comments": 12,
+   "comments": [
+    {
+     "author": "naramine",
+     "score": 2,
+     "body": "I'd recommend discord for any music that you can play from youtube or soundcloud. I use discord to play youtube playlists while my boyfriend and I are in a call together. If you're curious how to do it, you both need to have a discord account and one of you needs to make a server and invite the other person into it. Then you add a music bot of your choice (there are many haha) like [Rythm](https://rythmbot.co/) and queue up the playlist or music using the bot command. Rythm won't accept spotify links/playlists but [Groovy](https://groovy.bot/) *should* (never tried).  \n  \n\nOther than that, there's [JQBX](https://app.jqbx.fm/) which I haven't ever personally used so I can't say if it's good o"
+    },
+    {
+     "author": "Riskdinhu",
+     "score": 1,
+     "body": "Maybe over something like discord, sharing screen and audio?"
+    },
+    {
+     "author": "[deleted]",
+     "score": 1,
+     "body": "There is watch2gether.com and it works for YT videos, so it'll work if the album gets posted on youtube.\n\nOr if nothing works you both can access it however you can and just do a countdown before you play it. "
+    },
+    {
+     "author": "[deleted]",
+     "score": 1,
+     "body": "Watch2gether."
+    }
+   ]
+  }
+ },
+ {
+  "title": "Listen to YTM together with your friends, in sync",
+  "sub": "YoutubeMusic",
+  "score": 26,
+  "comments": 10,
+  "intent": 11,
+  "url": "https://reddit.com/r/YoutubeMusic/comments/1s8ky3r/listen_to_ytm_together_with_your_friends_in_sync/",
+  "self": "Hey everyone, so I've always been looking for a way to listen to YTM with friends, since the down of [Plug.dj](http://Plug.dj) back in the days, but couldn't find any good apps/websites. Spotify has Spotify Jam and Apple has Apple Shareplay, but nothing for Youtube Music :( So I made a little web browser extension to fix it, it's called [ListenTogether](https://listentogether.now/). Available for Chrome &amp; Firefox.\n\nEvery user can add songs to a queue, playback controls are shared, etc. I'm considering creating a mobile app so even more devices could be connected! Would anyone be interested? Would be glad if you gave it a try :) Open to any feedback or feature suggestions.\n\n[Video detailing how ListenTogether browser extension work](https://reddit.com/link/1s8ky3r/video/7yyiuq4nfdsg1/pl",
+  "thread": {
+   "num_comments": 10,
+   "comments": [
+    {
+     "author": "Cyan_Dino",
+     "score": 3,
+     "body": "A mobile app would be awesome"
+    },
+    {
+     "author": "ReservedRonin",
+     "score": 2,
+     "body": "How would the extension behave if not all users have premium? Would it roll ads or nah?"
+    },
+    {
+     "author": "Critical_Living8128",
+     "score": 1,
+     "body": "Would there be any possibility of mobile support?"
+    },
+    {
+     "author": "Parking-Aware",
+     "score": 1,
+     "body": "It will be great to have a feature to share between MacOS and Windows also"
+    }
+   ]
+  }
+ },
+ {
+  "title": "Is there any free music streaming app that has the similar feature as Spotify Jam?",
+  "sub": "androidapps",
+  "score": 1,
+  "comments": 3,
+  "intent": 10,
+  "url": "https://reddit.com/r/androidapps/comments/1j7wbzm/is_there_any_free_music_streaming_app_that_has/",
+  "self": "I just really want to listen to music together with my girlfriend, but we will have to pay for Spotify premium \ud83d\ude2d\nPlease help.",
+  "thread": {
+   "num_comments": 3,
+   "comments": [
+    {
+     "author": "Deathnote_yagami",
+     "score": 1,
+     "body": "If u really wanted Spotify premium, download opera browser and get 2 month of Spotify trial, if you can't, get any other apps, but they're not as good as Spotify."
+    }
+   ]
+  }
+ },
+ {
+  "title": "How do I listen to music together with my friend",
+  "sub": "spotify",
+  "score": 1,
+  "comments": 3,
+  "intent": 10,
+  "url": "https://reddit.com/r/spotify/comments/ob68sx/how_do_i_listen_to_music_together_with_my_friend/",
+  "self": "Is there any way to listen to music together, neither of us have premium accounts. \n\nThanks",
+  "thread": {
+   "num_comments": 3,
+   "comments": [
+    {
+     "author": "Juiceforlife999",
+     "score": 1,
+     "body": "idk if u can on spotify but use discord to \u201clisten together\u201d"
+    }
+   ]
+  }
+ },
+ {
+  "title": "Spotify Rich Presence workaround?",
+  "sub": "discordapp",
+  "score": 1,
+  "comments": 1,
+  "intent": 10,
+  "url": "https://reddit.com/r/discordapp/comments/1sdgiy4/spotify_rich_presence_workaround/",
+  "self": "I used to have my Spotify account linked for my listening status and to do the little listen together things, but it eventually became more of a nuisance than a benefit because it kept stopping playback when I got in calls\n\nI still listen to music constantly and I want to have the Rich Presence feature of Spotify but without having to have Discord have control over stopping my playback, I really just want to be able to share what I'm listening to with friends and if I want to start a Jam I'd rather just copypaste the link to them myself instead\n\nHas anyone found a workaround to achieve this? I found some github projects in older Reddit threads but they're either dead links or ancient and deprecated\n\nI figure since a couple games I play have mods that add a Rich Presence feature then surely",
+  "thread": {
+   "num_comments": 1,
+   "comments": [
+    {
+     "author": "AdditionalReaction52",
+     "score": 1,
+     "body": "Yep. I wish it gave an option to toggle rich presence whilst invisible. I js hate online / busy / away \ud83e\udee4"
+    }
+   ]
+  }
+ },
+ {
+  "title": "Listen to Playlist together at the same time, and is NOT spotify jam? - and other apps",
+  "sub": "PlaylistExchange",
+  "score": 1,
+  "comments": 0,
+  "intent": 10,
+  "url": "https://reddit.com/r/PlaylistExchange/comments/1rhjab2/listen_to_playlist_together_at_the_same_time_and/",
+  "self": "Wanted to list all the sites I use for listening to music with friends online, and ask the community for online sites or apps that help.\n\n***Spotify Premium Together***\n\n[https://app.rvrb.one](https://app.rvrb.one/)\u00a0\\- \"RVRB\" ('Re-verb'), Spotify only\n\nSupports Desktop/laptop primarily, but can work from Mobile devices if the website-tab is in the foreground during change of Song events.\n\n(devs are looking at other music sources I think, there's a Discord server and they mentioned Apple Music, its a shame Bandcamp &amp; Soundcloud doesnt have a comparable API, as that would be ideal)\n\nRVRB is the most mature 'listen together online' app I've found online in the last 6 years. The community carried over from JQBX when that shut down.\n\nIt's like old school irc chat, with built in music player",
+  "thread": {
+   "num_comments": 0,
+   "comments": []
+  }
+ }
+]
