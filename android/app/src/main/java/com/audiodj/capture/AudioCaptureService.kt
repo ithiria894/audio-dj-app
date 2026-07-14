@@ -40,6 +40,7 @@ class AudioCaptureService : Service() {
         const val ACTION_START = "com.audiodj.capture.START"
         const val ACTION_STOP = "com.audiodj.capture.STOP"
         const val ACTION_SAVE = "com.audiodj.capture.SAVE"
+        const val ACTION_PREFLIGHT = "com.audiodj.capture.PREFLIGHT" // Gate 2.6
         const val ACTION_LEVEL = "com.audiodj.capture.LEVEL"
         const val ACTION_LOG = "com.audiodj.capture.LOG"
         const val EXTRA_RESULT_CODE = "rc"
@@ -89,12 +90,35 @@ class AudioCaptureService : Service() {
             projection!!.registerCallback(object : MediaProjection.Callback() {
                 override fun onStop() { log("MediaProjection onStop() — capture ended by system/user"); stopEverything(); stopSelf() }
             }, Handler(Looper.getMainLooper()))
-            startCapture()
+            if (intent.action == ACTION_PREFLIGHT) runPreflight() else startCapture()
         } catch (e: Exception) {
             log("START failed: ${e.javaClass.simpleName}: ${e.message}")
             stopSelf()
         }
         return START_NOT_STICKY
+    }
+
+    /** Gate 2.6: does LiveKit 2.27.0 ScreenAudioCapturer.initAudioRecord succeed on THIS device?
+     *  (bytecode shows allocateDirect + a hasArray()==false rejection path — verify empirically). */
+    private fun runPreflight() {
+        try {
+            val direct = java.nio.ByteBuffer.allocateDirect(1920)
+            android.util.Log.i("Gate26", "directBuffer.hasArray=${direct.hasArray()} isDirect=${direct.isDirect}")
+            log("directBuffer.hasArray=${direct.hasArray()} (direct is always false)")
+            val cap = io.livekit.android.audio.ScreenAudioCapturer(projection!!).apply { gain = 1.0f }
+            val ok = cap.initAudioRecord(android.media.AudioFormat.ENCODING_PCM_16BIT, 2, 48_000)
+            val state = cap.javaClass.getDeclaredField("audioRecord").let {
+                it.isAccessible = true; (it.get(cap) as? android.media.AudioRecord)?.state
+            }
+            android.util.Log.i("Gate26", "screenAudioInit=$ok audioRecord.state=$state")
+            log("Gate2.6 screenAudioInit=$ok audioRecord.state=$state")
+            cap.releaseAudioResources()
+        } catch (e: Exception) {
+            android.util.Log.e("Gate26", "preflight EXCEPTION", e)
+            log("Gate2.6 preflight EXCEPTION: ${e.javaClass.simpleName}: ${e.message}")
+        } finally {
+            stopEverything(); stopSelf()
+        }
     }
 
     private fun startCapture() {

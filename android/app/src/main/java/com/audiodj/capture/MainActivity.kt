@@ -36,18 +36,23 @@ class MainActivity : AppCompatActivity() {
     // dev.token.api comes from local.properties (gitignored) via BuildConfig — no LAN IP in source.
     private val tokenApi = BuildConfig.DEV_TOKEN_API.ifEmpty { "http://127.0.0.1:8790/dev/token" }
 
+    private var preflightMode = false
+
     private val projLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
+        val pf = preflightMode; preflightMode = false
         if (res.resultCode == Activity.RESULT_OK && res.data != null) {
             val i = Intent(this, AudioCaptureService::class.java).apply {
-                action = AudioCaptureService.ACTION_START
+                action = if (pf) AudioCaptureService.ACTION_PREFLIGHT else AudioCaptureService.ACTION_START
                 putExtra(AudioCaptureService.EXTRA_RESULT_CODE, res.resultCode)
                 putExtra(AudioCaptureService.EXTRA_DATA, res.data)
             }
             ContextCompat.startForegroundService(this, i)
-            startBtn.isEnabled = false
-            stopBtn.isEnabled = true
-            saveBtn.isEnabled = true
-            appendLog("capture requested — allow the system prompt")
+            if (!pf) {
+                startBtn.isEnabled = false
+                stopBtn.isEnabled = true
+                saveBtn.isEnabled = true
+            }
+            appendLog(if (pf) "Gate2.6 preflight requested — allow the prompt" else "capture requested — allow the system prompt")
         } else {
             appendLog("projection permission cancelled")
         }
@@ -111,6 +116,11 @@ class MainActivity : AppCompatActivity() {
         }
         findViewById<Button>(R.id.gate2DisconnectBtn).setOnClickListener {
             gate2.disconnect()
+        }
+        findViewById<Button>(R.id.gate26Btn).setOnClickListener {
+            if (!hasMic()) { requestNeededPermissions(); return@setOnClickListener }
+            preflightMode = true
+            projLauncher.launch(mpm.createScreenCaptureIntent())
         }
 
         appendLog("ready. Tap 開始擷取, allow the prompt, then play music.")

@@ -33,7 +33,23 @@ Android connects to LiveKit as **DJ** but publishes nothing. `NoAudioHandler`; n
 
 **Key finding (A2DP early signal):** `AudioManager.mode` stayed **NORMAL** before *and* after room connect (and `commDevice` unchanged). `NoAudioHandler` prevented LiveKit from grabbing audio focus / switching to `IN_COMMUNICATION` on connect. This is only an early signal — the real A2DP test (music playing + a published audio track on a Bluetooth host) is **Gate 5**.
 
+## Gate 2.6 — ScreenAudioCapturer preflight ✅ PASS (Pixel 8 Pro / Android 16)
+A review flagged a possible blocker: LiveKit 2.27.0 `ScreenAudioCapturer` bytecode does
+`ByteBuffer.allocateDirect(...)` then rejects the buffer if `hasArray()==false`
+(`"ByteBuffer does not have backing array."`). On a standard JVM a direct buffer always has
+`hasArray()==false`, which would make `initAudioRecord` always return false. **Verified on-device
+instead of assuming:**
+```
+directBuffer.hasArray=true  isDirect=true          ← Android ART direct buffers DO have a backing array
+screenAudioInit=true  audioRecord.state=1 (INITIALIZED)
+```
+**Verdict:** ScreenAudioCapturer initializes fine on this device — the guard passes because Android/ART
+`allocateDirect()` reports `hasArray()==true` (unlike a standard JVM). **No SDK vendoring/patch needed.**
+Reusable dev-note: on Android, `ByteBuffer.allocateDirect().hasArray()` is `true`; do not assume JVM semantics.
+(Preflight path: `AudioCaptureService.ACTION_PREFLIGHT` → `runPreflight()`.)
+
 ## Not yet done
+- **Gate 2.5** targetSdk 35→36 isolated regression (rerun capture / permission / M0.5 lock / capture stop-start×2 / Gate 2 / FGS cleanup; keep target-35 vs target-36 results separate). Then add `AudioOptions(disableAudioPrewarming=true)` + rerun Gate 2.
 - **Gate 3** first audible publish (Path B: audio-only MediaProjection → ScreenAudioCapturer → LocalAudioTrack; experiments B1/B2). Before Gate 3: bump `targetSdk 36` + rerun capture/lock/permission tests; add `disableAudioPrewarming` (verify AudioOptions param), verify `setAudioRecordEnabled(false)` still fires the buffer callback.
 - **Gate 4** deterministic L/R stereo isolation.
 - **Gate 5** Bluetooth A2DP + true-lock non-silent (M0.6) + 15-min stability + lifecycle.

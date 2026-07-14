@@ -97,6 +97,13 @@
             android:text="Gate2 斷開" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/gate26Btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Gate2.6 ScreenAudioCapturer preflight" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
