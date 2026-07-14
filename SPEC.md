@@ -178,7 +178,7 @@ M0.5     Lock survival, pipeline only(onStop=0)             ✅ tested-device (P
 M0.6     Non-silent remote audio after lock                 ⏳
 Stage 0A LiveKit over LAN                                    ⏳ ← 而家
   ├ Gate 1  Web listener signaling(token/CORS/state/canPublish=false)  ✅
-  ├ Gate 2  Android signaling(connect DJ token, publishedTracks=0)     ⏳
+  ├ Gate 2  Android signaling(connect DJ token, publishedTracks=0)     ✅ (browser saw join/leave/reconnect; AudioManager stayed NORMAL)
   ├ Gate 3  First audible publish(Path B)                              ⏳
   ├ Gate 4  Objective stereo(L/R tone + listener PCM + SDP stats)      ⏳
   └ Gate 5  Bluetooth A2DP + true-lock non-silent + 15min + lifecycle  ⏳

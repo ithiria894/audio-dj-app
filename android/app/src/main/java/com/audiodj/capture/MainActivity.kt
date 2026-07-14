@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
             startService(Intent(this, AudioCaptureService::class.java).setAction(AudioCaptureService.ACTION_SAVE))
         }
         // Gate 2 — LiveKit connect-only (no capture, no publish)
-        gate2 = Gate2LiveKit(this) { m -> appendLog(m) }
+        gate2 = Gate2LiveKit(this) { m -> android.util.Log.i("Gate2", m); appendLog(m) }
         findViewById<Button>(R.id.gate2ConnectBtn).setOnClickListener {
             gate2.connect(lifecycleScope, tokenApi)
         }
